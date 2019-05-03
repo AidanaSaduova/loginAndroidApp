@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">My Application</string>
+
+
+    <!-- login strings -->
+    <string name="loginFailed">Login failed</string>
+    <string name="loginSuccess">Login success</string>
+    <string name="loginFailed_username_or_password_is_incorrect">Wrong user name or password!</string>
+
+    <!--Error strings-->
+
+</resources>
