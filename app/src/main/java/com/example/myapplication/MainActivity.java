@@ -10,6 +10,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
+
+import io.swagger.client.ApiException;
+import io.swagger.client.api.DefaultApi;
+
+import io.swagger.client.model.UserLoginApiForm;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText Username;
@@ -34,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void validate(String username, String password){
         if(username.equals("Admin") && password.equals("1234")){
-            Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+            //Intent intent = new Intent(MainActivity.this, SecondActivity.class);
             showToast(R.string.loginSuccess);
             //startActivity(intent);
 
@@ -62,6 +70,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()){
             case R.id.btnLogin:
                 validate(Username.getText().toString(),Password.getText().toString());
+                UserLoginApiForm formToSend = wrapToModel(Username.getText().toString(), Password.getText().toString());
+                //validateForm(formToSend);
+
+
+        }
+
+    }
+
+    private UserLoginApiForm wrapToModel(String username, String password){
+        UserLoginApiForm form = new UserLoginApiForm();
+        form.setName(username);
+        form.setPassword(password);
+        return form;
+    }
+
+
+    private void validateForm(final UserLoginApiForm form){
+        DefaultApi api = new DefaultApi();
+        try {
+
+            if(!api.login(form).getToken().isEmpty()){
+                showToast(R.string.loginSuccess);
+            }else {
+                showToast(R.string.loginFailed);
+            }
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ApiException e) {
+            e.printStackTrace();
         }
 
     }
